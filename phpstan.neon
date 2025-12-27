@@ -1,0 +1,35 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            message: "#^Called 'env' outside of the config directory which returns null when the config is cached, use 'config'.$#"
+            path: apps/*/config/*.php
+        -
+            message: '#^Cannot cast mixed to string.$#'
+
+    paths:
+        - apps/admin/app
+        - apps/admin/bootstrap/app.php
+        - apps/admin/config
+        - apps/admin/database
+        - apps/admin/public
+        - apps/admin/routes
+        - apps/customer/app
+        - apps/customer/bootstrap/app.php
+        - apps/customer/config
+        - apps/customer/database
+        - apps/customer/public
+        - apps/customer/routes
+        - common/src
+        - common/database
+        - database
+
+
+    level: 8
+
+    tmpDir: /tmp/phpstan

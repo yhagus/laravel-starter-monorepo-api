@@ -1,0 +1,12 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "laravel-starter-monorepo-api/customer-app",
+    "description": "Customer application (monorepo child) using root dependencies.",
+    "type": "project",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\Customer\\": "app/"
+        }
+    }
+}

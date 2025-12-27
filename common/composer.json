@@ -1,0 +1,26 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "core/common",
+    "description": "Shared domain package for laravel-starter-monorepo-api monorepo apps.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Common\\": "src/",
+            "App\\Common\\Database\\Factories\\": "database/factories/",
+            "App\\Common\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "App\\Common\\Providers\\CommonServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

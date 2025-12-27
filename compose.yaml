@@ -1,0 +1,109 @@
+services:
+  core-builder.test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+    networks:
+      - sail
+  laravel.test:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    tty: true
+    entrypoint: sh /app/apps/admin/deploy/local.sh
+    ports:
+      - '${ADMIN_HTTP_PORT:-8008}:8000'
+      - '${ADMIN_OCTANE_PORT:-8089}:8080'
+    volumes:
+      - '.:/app'
+    networks:
+      - sail
+    depends_on:
+      - core-builder.test
+      - psql
+      - redis
+      - typesense
+      - minio
+  customer.test:
+    build:
+      context: .
+      dockerfile: apps/customer/Dockerfile
+    tty: true
+    entrypoint: sh /app/apps/customer/deploy/local.sh
+    ports:
+      - '${CUSTOMER_HTTP_PORT:-8010}:8000'
+    volumes:
+      - '.:/app'
+    networks:
+      - sail
+    depends_on:
+      - core-builder.test
+      - psql
+      - redis
+      - typesense
+      - minio
+  psql:
+    image: 'postgres:17'
+    environment:
+      PGPASSWORD: laravel
+      POSTGRES_DB: laravel
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: laravel
+    ports:
+      - '${PSQL_PORT:-5900}:5432'
+    networks:
+      - sail
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '${REDIS_PORT:-5901}:6379'
+    volumes:
+      - 'sail-redis:/data'
+    networks:
+      - sail
+  minio:
+    image: 'minio/minio:latest'
+    ports:
+      - '${MINIO_PORT:-5903}:9000'
+      - '${MINIO_CONSOLE_PORT:-5904}:8900'
+    environment:
+      MINIO_ROOT_USER: sail
+      MINIO_ROOT_PASSWORD: password
+    volumes:
+      - 'sail-minio:/data'
+    networks:
+      - sail
+    command: 'minio server /data --console-address ":8900"'
+  insight:
+    image: redis/redisinsight:2.58.0
+    restart: unless-stopped
+    volumes:
+      - sail-insight:/data
+    environment:
+      - RI_APP_PORT=5540
+    networks:
+      - sail
+    ports:
+      - '${INSIGHT_PORT:-5905}:5540'
+  typesense:
+    image: 'typesense/typesense:27.1'
+    environment:
+      TYPESENSE_DATA_DIR: '${TYPESENSE_DATA_DIR:-/typesense-data}'
+      TYPESENSE_API_KEY: '${TYPESENSE_API_KEY:-xyz}'
+      TYPESENSE_ENABLE_CORS: '${TYPESENSE_ENABLE_CORS:-true}'
+    ports:
+      - '${TYPESENSE_PORT:-5906}:8108'
+    volumes:
+      - 'sail-typesense:/typesense-data'
+    networks:
+      - sail
+networks:
+  sail:
+    driver: bridge
+volumes:
+  sail-redis:
+  sail-typesense:
+  sail-minio:
+  sail-insight:

@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Admin\Providers;
+
+use Carbon\CarbonInterval;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
+use Illuminate\Routing\Route;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Laravel\Passport\Passport;
+
+final class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        Passport::ignoreRoutes();
+    }
+
+    public function boot(): void
+    {
+        $rootPath = dirname(__DIR__, 4);
+        $this->loadMigrationsFrom($rootPath.'/database/migrations');
+        Passport::enablePasswordGrant();
+
+        Passport::tokensExpireIn(CarbonInterval::hours(1));
+        Passport::refreshTokensExpireIn(CarbonInterval::days(1));
+
+        Scramble::configure()
+            ->routes(fn (Route $route) => Str::startsWith($route->uri, 'v1/'))
+            ->withDocumentTransformers(function (OpenApi $openApi): void {
+                /**
+                 * @var SecurityScheme $securityScheme.
+                 */
+                $securityScheme = SecurityScheme::http('bearer');
+                $openApi->secure($securityScheme);
+            });
+    }
+}
