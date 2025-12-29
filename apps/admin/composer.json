@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "yhagus/admin-app",
+    "name": "laravel-starter-monorepo-api/admin-app",
     "description": "Admin application (monorepo child) using root dependencies.",
     "type": "project",
     "require": {},

@@ -1,10 +1,5 @@
 /.phpunit.cache
-/node_modules
-/apps/admin/public/build
-/apps/admin/public/hot
-/apps/admin/public/storage
 /storage/*.key
-/apps/admin/storage/pail
 /vendor
 .env
 .DS_Store
