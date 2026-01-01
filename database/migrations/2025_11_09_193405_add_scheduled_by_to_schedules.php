@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('schedules', function (Blueprint $table): void {
-            $table->foreignUlid('scheduled_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignUuid('scheduled_by')->nullable()->constrained('users')->nullOnDelete();
         });
     }
 

@@ -7,7 +7,7 @@ services:
       - '.:/app'
     networks:
       - sail
-  laravel.test:
+  admin.test:
     build:
       context: .
       dockerfile: apps/admin/Dockerfile

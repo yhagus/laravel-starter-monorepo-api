@@ -11,9 +11,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table): void {
-            $table->ulid('id')->primary();
+            $table->uuid('id')->primary();
             $table->string('name');
-            $table->morphs('schedulable');
+            $table->uuidMorphs('schedulable');
             $table->text('description')->nullable();
             $table->string('frequency');
             $table->string('cron_expression')->nullable(); // used on custom
