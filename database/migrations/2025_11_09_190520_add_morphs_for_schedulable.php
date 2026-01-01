@@ -14,10 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('schedules', function (Blueprint $table): void {
-            $table->string('schedulable_type');
-            $table->string('schedulable_id');
-
-            $table->index(['schedulable_type', 'schedulable_id']);
+            $table->uuidMorphs('schedulable');
         });
     }
 

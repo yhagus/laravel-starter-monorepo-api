@@ -14,11 +14,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('activity_log', function (Blueprint $table): void {
-            $table->dropMorphs('subject', 'subject');
-            $table->dropMorphs('causer', 'causer');
+            $table->dropUuidMorphs('subject', 'subject');
+            $table->dropUuidMorphs('causer', 'causer');
 
-            $table->nullableUlidMorphs('subject', 'subject');
-            $table->nullableUlidMorphs('causer', 'causer');
+            $table->nullableUuidMorphs('subject', 'subject');
+            $table->nullableUuidMorphs('causer', 'causer');
         });
     }
 
@@ -28,8 +28,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('activity_log', function (Blueprint $table): void {
-            $table->dropMorphs('subject');
-            $table->dropMorphs('causer');
+            $table->dropUuidMorphs('subject');
+            $table->dropUuidMorphs('causer');
 
             $table->nullableMorphs('subject', 'subject');
             $table->nullableMorphs('causer', 'causer');
