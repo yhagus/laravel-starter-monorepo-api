@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Admin\Http\Controllers\Auth;
 
+use App\Admin\Http\Requests\Auth\EmailNotificationRequest;
 use App\Common\Resources\HttpResource;
 use Dedoc\Scramble\Attributes\Group;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 #[Group('Authentication')]
@@ -15,7 +15,7 @@ final class VerificationEmailController extends Controller
     /**
      * Re-send email verification
      */
-    public function create(Request $request)
+    public function create(EmailNotificationRequest $request)
     {
         $request->user()->sendEmailVerificationNotification();
 
